@@ -7,6 +7,7 @@ export const CartContext = createContext();
 export default function CartContextProvider({ children }) {
     const [numberOfCartItem, setNumberOfCartItem] = useState(0);
     const [allCartItems, setAllCartItems] = useState([])
+    const [cartId, setCartId] = useState()
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(false);
     const apiUrl = 'https://ecommerce.routemisr.com/api/v1/cart';
@@ -32,51 +33,37 @@ export default function CartContextProvider({ children }) {
     }
 
     async function addToCart(productId) {
-        axios.post('https://ecommerce.routemisr.com/api/v1/cart', {
+        try {
+            setLoading(true);
+            const res = await axios.post(apiUrl, { productId }, {
+                headers: { token: localStorage.getItem('token') }
+            });
 
-            productId: "6428eb43dc1175abc65ca0b3"
-
-        }, {
-            headers: {
-                token: localStorage.getItem('token')
+            if (res.data.status === 'success') {
+                toast.success('Product Added Successfully')
+                setNumberOfCartItem(res.data.numOfCartItems);
             }
-        }).then((response) => {
-            console.log(response);
-        }).catch((err) => {
-            console.log(err);
-        })
-        // console.log(productId);
-        // try {
-        //     ``
-        //     setLoading(true);
-        //     const res = await axios.post(apiUrl, { productId }, {
-        //         headers: { token: localStorage.getItem('token') }
-        //     });
 
-        //     if (res.data.status === 'success') {
-        //         toast.success('Product Added Successfully')
-        //         setNumberOfCartItem(res.data.numOfCartItems);
-        //     }
+            fetchCart();
+        } catch (error) {
+            console.log(error);
+            toast.error("Something Went Wrong.")
 
-        //     fetchCart();
-        // } catch (error) {
-        //     console.log(error);
-        //     toast.error("Something Went Wrong.")
+        } finally {
+            setLoading(false);
+        }
 
-        // } finally {
-        //     setLoading(false);
-        // }
     }
-
 
     async function getCartItems() {
         try {
             const res = await axios.get('https://ecommerce.routemisr.com/api/v1/cart', {
                 headers: { token: localStorage.getItem('token') },
             });
-            console.log(res);
             if (res.data.status === 'success') {
                 setAllCartItems(res.data.data.products)
+                setNumberOfCartItem(res.data.numOfCartItems)
+                setCartId(res.data.cartId)
             }
 
         } catch (error) {
@@ -99,7 +86,7 @@ export default function CartContextProvider({ children }) {
         }
     }
     return (
-        <CartContext.Provider value={{ cartItems, numberOfCartItem, loading, addToCart, getCartItems, updateItemCount, allCartItems }}>
+        <CartContext.Provider value={{ cartItems, numberOfCartItem, loading, addToCart, getCartItems, updateItemCount, allCartItems, cartId }}>
             {children}
         </CartContext.Provider>
     );

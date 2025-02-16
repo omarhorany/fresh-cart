@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../Context/CartContext";
 import { Trash2, Minus, Plus } from "lucide-react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 
 
 const Cart = () => {
@@ -75,16 +76,16 @@ const Cart = () => {
               <tr key={item.id} className="border-b hover:bg-gray-50 transition">
                 <td className="p-4 text-center">
                   <img
-                    src={item?.product?.imageCover}
+                    src={item.imageCover}
                     className="w-16 md:w-24 rounded-lg shadow"
                     alt={item.name}
                   />
                 </td>
-                <td className="p-4 font-semibold text-gray-900 text-center">{item?.product?.title}</td>
+                <td className="p-4 font-semibold text-gray-900 text-center">{item.title}</td>
                 <td className="p-4 text-center">
                   <div className="flex items-center justify-center space-x-2">
                     <button
-                      onClick={() => increamentCount(item.product._id, item.count - 1)}
+                      onClick={() => increamentCount(item._id, item.count - 1)}
 
                       className="p-2 border rounded-full text-gray-600 hover:bg-gray-200 transition"
                     >
@@ -92,7 +93,7 @@ const Cart = () => {
                     </button>
                     <span className="font-semibold">{item.count}</span>
                     <button
-                      onClick={() => increamentCount(item.product._id, item.count + 1)}
+                      onClick={() => increamentCount(item._id, item.count + 1)}
                       className="p-2 border rounded-full text-gray-600 hover:bg-gray-200 transition"
                     >
                       <Plus size={14} />
@@ -119,12 +120,12 @@ const Cart = () => {
         <h2 className="text-xl font-semibold text-gray-800">
           Total Price: <span className="text-green-600">${getTotalPrice()}</span>
         </h2>
-        <button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition mt-4 sm:mt-0"
-          onClick={() => alert("Proceeding to payment...")}
-        >
-          Checkout
-        </button>
+        <Link to={"/order"}>
+          <button
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition mt-4 sm:mt-0">
+            Checkout
+          </button>
+        </Link>
       </div>
     </div>
   );

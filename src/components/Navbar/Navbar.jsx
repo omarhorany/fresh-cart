@@ -1,10 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import Logo from "../../assets/images/freshcart-logo.svg";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { CartContext } from "../Context/CartContext";
-
 const Navbar = () => {
   const { token, setToken } = useContext(AuthContext);
   const { numberOfCartItem } = useContext(CartContext)
@@ -16,6 +15,11 @@ const Navbar = () => {
     setToken(null);
     navigate("/login");
   }
+
+
+  // useEffect(() => {
+  //   getCartItems()
+  // }, [])
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">

@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import ProductDetails from './components/ProductDetails/ProductDetails';
 import CartContextProvider from './components/Context/CartContext'
 import { Toaster } from 'react-hot-toast';
+import Order from './components/Order/Order';
 
 const queryClient = new QueryClient()
 
@@ -27,6 +28,7 @@ const routes = createHashRouter([
       { path: 'brands', element: <Guard><Brands /> </Guard> },
       { path: 'categories', element: <Guard> <Categories /></Guard> },
       { path: 'details/:id', element: <Guard> <ProductDetails /></Guard> },
+      { path: 'order', element: <Guard> <Order /></Guard> },
       { path: 'login', element: <AuthGuard><Login /></AuthGuard> },
       { path: 'register', element: <AuthGuard><Register /></AuthGuard> },
       { path: '*', element: <Error /> },
